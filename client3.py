@@ -32,10 +32,17 @@ N = 500
 def getDataPoint(quote):
     """ Produce all the needed values to generate a datapoint """
     stock = quote['stock']
-    bid_price = float(quote['top_bid']['price'])
-    ask_price = float(quote['top_ask']['price'])
-    price = (bid_price + ask_price) / 2  # Corrected calculation
+    bid_price = float(quote['top_bid']['price']) if quote['top_bid']['price'] is not None else None
+    ask_price = float(quote['top_ask']['price']) if quote['top_ask']['price'] is not None else None
+    
+    # If both prices are None, return None
+    if bid_price is None and ask_price is None:
+        return stock, bid_price, ask_price, None
+    
+    price = (bid_price + ask_price) / 2 if (bid_price is not None and ask_price is not None) else bid_price or ask_price
     return stock, bid_price, ask_price, price
+
+
 
 
 
